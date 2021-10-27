@@ -1,0 +1,180 @@
+definitions:
+  auth.LoginCredentials:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  auth.RegisterCredentials:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  core.BaseApiErrorResponse:
+    properties:
+      error_code:
+        type: integer
+      error_message:
+        type: string
+    type: object
+  core.BaseApiResponse:
+    properties:
+      count:
+        type: integer
+      results:
+        items: {}
+        type: array
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  gwt.DefaultErrResponse:
+    properties:
+      error_code:
+        type: integer
+      error_message:
+        type: string
+    type: object
+  gwt.DefaultLoginResponse:
+    properties:
+      access_expire:
+        type: integer
+      access_token:
+        type: string
+      refresh_expire:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  gwt.DefaultLogoutResponse:
+    type: object
+  gwt.RefreshRequestData:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  user.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      parameters:
+      - description: LoginCredentials
+        in: body
+        name: LoginCredentials
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gwt.DefaultLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gwt.DefaultErrResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/gwt.DefaultErrResponse'
+      summary: Login user
+  /auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gwt.DefaultLogoutResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/gwt.DefaultErrResponse'
+      summary: Logout user
+  /auth/refresh:
+    post:
+      parameters:
+      - description: gwt.RefreshRequestData
+        in: body
+        name: gwt.RefreshRequestData
+        required: true
+        schema:
+          $ref: '#/definitions/gwt.RefreshRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gwt.DefaultLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gwt.DefaultErrResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/gwt.DefaultErrResponse'
+      summary: Refresh tokens
+  /auth/register:
+    post:
+      parameters:
+      - description: RegisterCredentials
+        in: body
+        name: RegisterCredentials
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: Registers user
+swagger: "2.0"

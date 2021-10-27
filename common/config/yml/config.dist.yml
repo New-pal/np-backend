@@ -1,0 +1,10 @@
+database_dsn: host=pal_db port=5432 user=postgres dbname=newpal password=postgres TimeZone=UTC
+database_type: postgres
+is_prod: false
+auth:
+  access_secret_key: zxliLHUIh908hOUh
+  access_lifetime_minutes: 20
+  refresh_lifetime_hours: 48
+  signing_method: HS512
+  auth_head_name: Bearer
+  table_prefix: jwt12345_
