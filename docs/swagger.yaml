@@ -15,6 +15,48 @@ definitions:
       password:
         type: string
     type: object
+  category.Category:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  category.Subcategory:
+    properties:
+      category:
+        $ref: '#/definitions/category.Category'
+      categoryId:
+        type: integer
+      code:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      order:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
   core.BaseApiErrorResponse:
     properties:
       error_code:
@@ -81,6 +123,102 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/category.Category'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: get categories list
+  /api/categories/{id}:
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/category.Category'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: get category by id
+  /api/subcategories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/category.Subcategory'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: get subcategories list
+  /api/subcategories/{id}:
+    get:
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/category.Subcategory'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: get subcategory by id
   /auth/login:
     post:
       parameters:

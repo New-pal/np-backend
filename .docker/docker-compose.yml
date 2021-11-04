@@ -52,7 +52,7 @@ services:
     volumes:
       - ..:/usr/src/app
     ports:
-      - "9099:8000"
+      - "9099:9099"
     depends_on:
       - pal_db
 #      - rabbitmq

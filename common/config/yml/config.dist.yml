@@ -1,6 +1,14 @@
-database_dsn: host=pal_db port=5432 user=postgres dbname=newpal password=postgres TimeZone=UTC
-database_type: postgres
 is_prod: false
+
+db:
+  dsn: host=pal_db port=5432 user=postgres dbname=newpal password=postgres TimeZone=UTC
+  type: postgres
+
+redis:
+  addr: pal_redis:6379
+  pass: ""
+  db: 0
+
 auth:
   access_secret_key: zxliLHUIh908hOUh
   access_lifetime_minutes: 20

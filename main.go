@@ -2,8 +2,10 @@ package main
 
 import (
 	"github.com/New-pal/np-backend/auth"
+	"github.com/New-pal/np-backend/category"
 	"github.com/New-pal/np-backend/common/config"
 	"github.com/New-pal/np-backend/common/db"
+	"github.com/New-pal/np-backend/core"
 	"github.com/New-pal/np-backend/docs"
 	"github.com/New-pal/np-backend/user"
 	gwt "github.com/ennaque/go-gin-jwt"
@@ -25,18 +27,12 @@ func main() {
 	defer sqlDb.Close()
 	migrate(database)
 
-	userRepository := user.NewUserRepository(database)
-	userService := user.NewUserService(database)
-
-	jwt := initJwt(database, userRepository)
-
 	router := gin.Default()
-	auth.BindRouter(router, auth.NewAuthHandler(userRepository, userService, jwt.Handler))
-	if !viper.GetBool("is_prod") {
-		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	}
+	router.Use(core.CorsMiddleware(), core.ContentTypeMiddleware())
 
-	if err := router.Run(":8000"); err != nil {
+	bindRoutes(router, database)
+
+	if err := router.Run(":9099"); err != nil {
 		panic(err)
 	}
 }
@@ -65,13 +61,34 @@ func initJwt(db *gorm.DB, ur *user.UserRepository) *gwt.Gwt {
 	return jwt
 }
 
+func bindRoutes(router *gin.Engine, db *gorm.DB) {
+	userRepository := user.NewUserRepository(db)
+	userService := user.NewUserService(db)
+
+	categoryRepository := category.NewCategoryRepository(db)
+	categoryService := category.NewCategoryService(db)
+	subcategoryRepository := category.NewSubcategoryRepository(db)
+	subcategoryService := category.NewSubcategoryService(db)
+
+	jwt := initJwt(db, userRepository)
+
+	auth.BindRouter(router, auth.NewAuthHandler(userRepository, userService, jwt.Handler))
+	category.BindRouter(router, category.NewCategoryHandler(categoryRepository, categoryService,
+		subcategoryRepository, subcategoryService))
+
+	if !viper.GetBool("is_prod") {
+		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
+}
+
 func migrate(database *gorm.DB) {
 	user.Migrate(database)
+	category.Migrate(database)
 }
 
 func initSwagger() {
 	docs.SwaggerInfo.Title = "Newpal API"
 	docs.SwaggerInfo.Version = "1.0.0"
 	docs.SwaggerInfo.Description = "Backend for newpal application"
-	docs.SwaggerInfo.Host = "/"
+	docs.SwaggerInfo.Host = "localhost:9099"
 }

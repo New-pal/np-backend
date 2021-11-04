@@ -29,8 +29,9 @@ func (h *Handler) register(c *gin.Context) {
 		return
 	}
 	usr, err := h.us.CreateUser(credentials.Email, credentials.Name, credentials.Password)
+	// TODO: now we do not have adequate way to check unique keys violation; fix it in future
 	if err != nil {
-		core.ApiErrorResponse(c, http.StatusInternalServerError, err.Error())
+		core.ApiErrorResponse(c, http.StatusBadRequest, "already exists")
 		return
 	}
 	core.ApiResponse(c, http.StatusOK, usr.(*user.User))
