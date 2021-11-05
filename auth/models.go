@@ -6,7 +6,10 @@ type LoginCredentials struct {
 }
 
 type RegisterCredentials struct {
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Email     string `json:"email"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Password  string `json:"password"`
+	Age       uint   `json:"age"`
+	Gender    bool   `json:"gender"`
 }

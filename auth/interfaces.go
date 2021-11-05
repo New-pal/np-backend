@@ -11,5 +11,6 @@ type userRepositoryInterface interface {
 }
 
 type userServiceInterface interface {
-	CreateUser(email string, name string, password string) (interface{ userInterface }, error)
+	CreateUser(email string, firstName string, lastName string, gender bool, age uint,
+		password string) (interface{ userInterface }, error)
 }

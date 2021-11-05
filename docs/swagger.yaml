@@ -8,9 +8,15 @@ definitions:
     type: object
   auth.RegisterCredentials:
     properties:
+      age:
+        type: integer
       email:
         type: string
-      name:
+      first_name:
+        type: string
+      gender:
+        type: boolean
+      last_name:
         type: string
       password:
         type: string
@@ -107,17 +113,35 @@ definitions:
     type: object
   user.User:
     properties:
+      age:
+        type: integer
       createdAt:
         type: string
       deletedAt:
         $ref: '#/definitions/gorm.DeletedAt'
       email:
         type: string
+      first_name:
+        type: string
+      gender:
+        description: false - female true - male
+        type: boolean
       id:
         type: integer
-      name:
+      last_name:
         type: string
       updatedAt:
+        type: string
+    type: object
+  user.userUpdate:
+    properties:
+      age:
+        type: integer
+      first_name:
+        type: string
+      gender:
+        type: boolean
+      last_name:
         type: string
     type: object
 info:
@@ -219,6 +243,54 @@ paths:
           schema:
             $ref: '#/definitions/core.BaseApiErrorResponse'
       summary: get subcategory by id
+  /api/user:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: get current user
+    patch:
+      parameters:
+      - description: userUpdate
+        in: body
+        name: userUpdate
+        required: true
+        schema:
+          $ref: '#/definitions/user.userUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/core.BaseApiResponse'
+            - properties:
+                results:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/core.BaseApiErrorResponse'
+      summary: patch current user
   /auth/login:
     post:
       parameters:

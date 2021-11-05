@@ -189,6 +189,89 @@ var doc = `{
                 }
             }
         },
+        "/api/user": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get current user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/core.BaseApiResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/user.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/core.BaseApiErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "patch current user",
+                "parameters": [
+                    {
+                        "description": "userUpdate",
+                        "name": "userUpdate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.userUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/core.BaseApiResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/user.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/core.BaseApiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "produces": [
@@ -359,10 +442,19 @@ var doc = `{
         "auth.RegisterCredentials": {
             "type": "object",
             "properties": {
+                "age": {
+                    "type": "integer"
+                },
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "boolean"
+                },
+                "last_name": {
                     "type": "string"
                 },
                 "password": {
@@ -511,6 +603,9 @@ var doc = `{
         "user.User": {
             "type": "object",
             "properties": {
+                "age": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -520,13 +615,37 @@ var doc = `{
                 "email": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "false - female true - male",
+                    "type": "boolean"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "last_name": {
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.userUpdate": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "boolean"
+                },
+                "last_name": {
                     "type": "string"
                 }
             }

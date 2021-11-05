@@ -12,9 +12,12 @@ func Migrate(db *gorm.DB) {
 
 type User struct {
 	gorm.Model
-	Email    string `gorm:"size:255;not null;index;unique" valid:"email,required" json:"email"`
-	Password []byte `json:"-" swaggerignore:"true"`
-	Name     string `json:"name"`
+	Email     string `json:"email" gorm:"size:255;not null;index;unique" valid:"email,required"`
+	Password  []byte `json:"-" swaggerignore:"true"`
+	FirstName string `json:"first_name" gorm:"size:255; not null;" valid:"required"`
+	LastName  string `json:"last_name" gorm:"size:255"`
+	Gender    bool   `json:"gender" gorm:"type:bool;not null"` // false - female true - male
+	Age       uint   `json:"age" gorm:"type:uint;not null"`
 }
 
 func (u *User) GetId() string {
@@ -33,7 +36,4 @@ func (u *User) GetPassword() []byte {
 }
 func (u *User) GetEmail() string {
 	return u.Email
-}
-func (u *User) GetName() string {
-	return u.Name
 }

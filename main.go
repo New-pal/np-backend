@@ -28,7 +28,6 @@ func main() {
 	migrate(database)
 
 	router := gin.Default()
-	router.Use(core.CorsMiddleware(), core.ContentTypeMiddleware())
 
 	bindRoutes(router, database)
 
@@ -62,9 +61,10 @@ func initJwt(db *gorm.DB, ur *user.UserRepository) *gwt.Gwt {
 }
 
 func bindRoutes(router *gin.Engine, db *gorm.DB) {
+	router.Use(core.CorsMiddleware(), core.ContentTypeMiddleware())
+
 	userRepository := user.NewUserRepository(db)
 	userService := user.NewUserService(db)
-
 	categoryRepository := category.NewCategoryRepository(db)
 	categoryService := category.NewCategoryService(db)
 	subcategoryRepository := category.NewSubcategoryRepository(db)
@@ -72,8 +72,13 @@ func bindRoutes(router *gin.Engine, db *gorm.DB) {
 
 	jwt := initJwt(db, userRepository)
 
-	auth.BindRouter(router, auth.NewAuthHandler(userRepository, userService, jwt.Handler))
-	category.BindRouter(router, category.NewCategoryHandler(categoryRepository, categoryService,
+	apiGroup := router.Group("/api")
+	apiGroup.Use(jwt.Middleware.GetAuthMiddleware())
+	authGroup := router.Group("/auth")
+
+	auth.BindRouter(authGroup, auth.NewAuthHandler(userRepository, userService, jwt.Handler))
+	user.BindRouter(apiGroup, user.NewUserHandler(userRepository, userService))
+	category.BindRouter(apiGroup, category.NewCategoryHandler(categoryRepository, categoryService,
 		subcategoryRepository, subcategoryService))
 
 	if !viper.GetBool("is_prod") {
