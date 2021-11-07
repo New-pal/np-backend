@@ -13,9 +13,19 @@ type userUpdate struct {
 	Age       uint   `json:"age"`
 }
 
+type userSettingsUpdate struct {
+	Language           string `json:"language"`
+	LastNameVisibility bool   `json:"last_name_visibility"`
+	AgeVisibility      bool   `json:"age_visibility"`
+	TimeFormat         bool   `json:"time_format"`
+	DistanceUnits      bool   `json:"distance_units"`
+}
+
 type Handler struct {
-	ur *UserRepository
-	us *UserService
+	ur  *UserRepository
+	us  *UserService
+	usr *UserSettingsRepository
+	uss *UserSettingsService
 }
 
 // userGet - get current user
@@ -58,6 +68,7 @@ func (h *Handler) userPatch(c *gin.Context) {
 	core.ApiResponse(c, http.StatusOK, u)
 }
 
-func NewUserHandler(ur *UserRepository, us *UserService) *Handler {
-	return &Handler{ur: ur, us: us}
+func NewUserHandler(ur *UserRepository, us *UserService, usr *UserSettingsRepository,
+	uss *UserSettingsService) *Handler {
+	return &Handler{ur: ur, us: us, usr: usr, uss: uss}
 }

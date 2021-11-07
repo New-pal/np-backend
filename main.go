@@ -65,6 +65,8 @@ func bindRoutes(router *gin.Engine, db *gorm.DB) {
 
 	userRepository := user.NewUserRepository(db)
 	userService := user.NewUserService(db)
+	userSettingsRepository := user.NewUserSettingsRepository(db)
+	userSettingsService := user.NewUserSettingsService(db)
 	categoryRepository := category.NewCategoryRepository(db)
 	categoryService := category.NewCategoryService(db)
 	subcategoryRepository := category.NewSubcategoryRepository(db)
@@ -77,7 +79,8 @@ func bindRoutes(router *gin.Engine, db *gorm.DB) {
 	authGroup := router.Group("/auth")
 
 	auth.BindRouter(authGroup, auth.NewAuthHandler(userRepository, userService, jwt.Handler))
-	user.BindRouter(apiGroup, user.NewUserHandler(userRepository, userService))
+	user.BindRouter(apiGroup, user.NewUserHandler(userRepository, userService, userSettingsRepository,
+		userSettingsService))
 	category.BindRouter(apiGroup, category.NewCategoryHandler(categoryRepository, categoryService,
 		subcategoryRepository, subcategoryService))
 

@@ -41,3 +41,29 @@ func (us *UserService) UpdateUser(user *User) error {
 func NewUserService(con *gorm.DB) *UserService {
 	return &UserService{con: con}
 }
+
+type UserSettingsService struct {
+	con *gorm.DB
+}
+
+func (uss *UserSettingsService) CreateUserSettings(userId uint, language string, lastNameVisibility bool,
+	ageVisibility bool, timeFormat bool, distanceUnits bool) (interface{ userSettingsInterface }, error) {
+	settings := UserSettings{
+		UserId:             userId,
+		Language:           language,
+		LastNameVisibility: lastNameVisibility,
+		AgeVisibility:      ageVisibility,
+		TimeFormat:         timeFormat,
+		DistanceUnits:      distanceUnits,
+	}
+	res := uss.con.Create(&settings)
+	return &settings, res.Error
+}
+
+func (uss *UserSettingsService) UpdateUserSettings(userSettings *UserSettings) error {
+	return uss.con.Save(userSettings).Error
+}
+
+func NewUserSettingsService(con *gorm.DB) *UserSettingsService {
+	return &UserSettingsService{con: con}
+}
