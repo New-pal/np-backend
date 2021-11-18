@@ -442,9 +442,6 @@ var doc = `{
         "auth.RegisterCredentials": {
             "type": "object",
             "properties": {
-                "age": {
-                    "type": "integer"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -603,8 +600,8 @@ var doc = `{
         "user.User": {
             "type": "object",
             "properties": {
-                "age": {
-                    "type": "integer"
+                "birthday": {
+                    "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
@@ -636,8 +633,8 @@ var doc = `{
         "user.userUpdate": {
             "type": "object",
             "properties": {
-                "age": {
-                    "type": "integer"
+                "birthday": {
+                    "type": "string"
                 },
                 "first_name": {
                     "type": "string"

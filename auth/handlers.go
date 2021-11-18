@@ -29,7 +29,7 @@ func (h *Handler) register(c *gin.Context) {
 		return
 	}
 	usr, err := h.us.CreateUser(credentials.Email, credentials.FirstName, credentials.LastName,
-		credentials.Gender, credentials.Age, credentials.Password)
+		credentials.Gender, credentials.Password)
 	// TODO: now we do not have adequate way to check unique keys violation; fix it in future
 	if err != nil {
 		core.ApiErrorResponse(c, http.StatusBadRequest, "already exists")

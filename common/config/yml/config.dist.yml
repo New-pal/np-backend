@@ -16,3 +16,8 @@ auth:
   signing_method: HS512
   auth_head_name: Bearer
   table_prefix: jwt12345_
+
+cors:
+  white_list:
+    - "http://localhost:4300"
+  allow_all: false

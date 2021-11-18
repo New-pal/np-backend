@@ -22,9 +22,9 @@ type UserService struct {
 	con *gorm.DB
 }
 
-func (us *UserService) CreateUser(email string, firstName string, lastName string, gender bool, age uint,
+func (us *UserService) CreateUser(email string, firstName string, lastName string, gender bool,
 	password string) (interface{ userInterface }, error) {
-	user := User{Email: email, FirstName: firstName, LastName: lastName, Gender: gender, Age: age}
+	user := User{Email: email, FirstName: firstName, LastName: lastName, Gender: gender}
 	err := user.SetPassword(password)
 	if err != nil {
 		return nil, err

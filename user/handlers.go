@@ -4,13 +4,14 @@ import (
 	"github.com/New-pal/np-backend/core"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 type userUpdate struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Gender    bool   `json:"gender"`
-	Age       uint   `json:"age"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Gender    bool      `json:"gender"`
+	Birthday  time.Time `json:"birthday"`
 }
 
 type Handler struct {

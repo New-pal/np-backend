@@ -3,6 +3,7 @@ package core
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 func ContentTypeMiddleware() gin.HandlerFunc {
@@ -13,9 +14,10 @@ func ContentTypeMiddleware() gin.HandlerFunc {
 }
 
 func CorsMiddleware() gin.HandlerFunc {
-	//corsConfig := cors.DefaultConfig()
-	////corsConfig.AllowAllOrigins = true
-	//corsConfig.AllowOrigins = []string{"http://localhost:4200"}
-	//corsMiddleware := cors.New(corsConfig)
-	return cors.Default()
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = viper.GetStringSlice("cors.white_list")
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length", "Authorization"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PATCH", "DELETE", "PUT"}
+	corsMiddleware := cors.New(corsConfig)
+	return corsMiddleware
 }

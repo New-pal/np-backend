@@ -8,8 +8,6 @@ definitions:
     type: object
   auth.RegisterCredentials:
     properties:
-      age:
-        type: integer
       email:
         type: string
       first_name:
@@ -113,8 +111,8 @@ definitions:
     type: object
   user.User:
     properties:
-      age:
-        type: integer
+      birthday:
+        type: string
       createdAt:
         type: string
       deletedAt:
@@ -135,8 +133,8 @@ definitions:
     type: object
   user.userUpdate:
     properties:
-      age:
-        type: integer
+      birthday:
+        type: string
       first_name:
         type: string
       gender:
